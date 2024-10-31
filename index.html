@@ -95,7 +95,7 @@
 </head>
 <body>
     <div class="logo">
-        <img src="Happy Diwali.jpg" alt="Diwali Logo"> <!-- Replace 'your-logo-url.png' with the actual URL of your logo -->
+        <img src="Happy Diwali.jpg" alt="Diwali Logo">
     </div>
     <h1> Let's Celebrate Diwali Together </h1>
 
@@ -112,62 +112,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
         const quotes = [
-    "Let’s celebrate the festival in the true sense by spreading joy and light up the world of others.",
-    "Wishing you a Diwali that brings happiness, prosperity, and joy to you and all your family.",
-    "May the light of diyas guide you to happiness, health, and success. Happy Diwali!",
-    "Let the sparkles of fireworks light up the sky. Happy Diwali!",
-    "Let this Diwali light up new dreams, fresh hopes, and undiscovered paths!",
-    "Wishing you a Diwali filled with joy and prosperity.",
-    "May the lights of Diwali guide you on the path of happiness and success.",
-    "Let’s make this Diwali memorable by sharing love and joy with others.",
-    "On this auspicious festival, may your life be filled with happiness and prosperity.",
-    "Wishing you a year full of success, joy, and peace. Happy Diwali!",
-    "May the festival of lights illuminate your life with joy and happiness.",
-    "This Diwali, let’s spread the light of knowledge and love.",
-    "May your life be as colorful and shimmering as the lights of Diwali.",
-    "Let’s celebrate the victory of light over darkness. Happy Diwali!",
-    "May your home be filled with joy, peace, and prosperity this Diwali.",
-    "Wishing you a Diwali full of sweets, happiness, and good vibes.",
-    "Let’s make this Diwali brighter by sharing love and happiness.",
-    "May the joy and festivities of Diwali fill your heart with happiness.",
-    "Celebrate this Diwali with a heart full of joy and gratitude.",
-    "Wishing you and your family a blessed and prosperous Diwali.",
-    "This Diwali, let’s illuminate the world with kindness and compassion.",
-    "May this Diwali bring new hopes and opportunities for you.",
-    "Let the sparkles of Diwali fill your life with joy and happiness.",
-    "May your life shine with the light of happiness and success.",
-    "Celebrate the festival of lights with love, joy, and peace.",
-    "Wishing you a Diwali as bright as the lights that illuminate your home.",
-    "Let’s create beautiful memories this Diwali together.",
-    "May your heart be filled with joy and your home with happiness.",
-    "This Diwali, may you be blessed with health, wealth, and happiness.",
-    "Wishing you a sparkling Diwali filled with love and laughter.",
-    "On this special occasion, may your dreams come true.",
-    "May the spirit of Diwali fill your heart with serenity and peace.",
-    "Let’s celebrate this Diwali by spreading love and positivity.",
-    "Wishing you all the joy and prosperity this Diwali brings.",
-    "May your life be filled with the brightness of Diwali.",
-    "This Diwali, let’s light up the world with kindness.",
-    "Wishing you success and happiness on this auspicious day.",
-    "May the divine light of Diwali shine upon you and your family.",
-    "Let’s cherish the moments of happiness this Diwali brings.",
-    "Wishing you a Diwali full of beautiful memories and blessings.",
-    "May the festival of lights brighten your life with joy and prosperity.",
-    "Celebrate this Diwali with your loved ones and create beautiful memories.",
-    "On this Diwali, let’s spread joy and love to everyone around us.",
-    "Wishing you a joyous and prosperous Diwali!",
-    "Let the lights of Diwali fill your life with endless joy.",
-    "May your heart be filled with joy and your home with happiness this Diwali.",
-    "This Diwali, may you achieve all your goals and dreams.",
-    "Wishing you a bright and prosperous Diwali.",
-    "Let’s light up the world with love and happiness this Diwali.",
-    "May the spirit of Diwali bring you closer to your loved ones.",
-    "Wishing you peace, joy, and prosperity on this auspicious occasion.",
-    "May the festival of lights bring you new opportunities and happiness.",
-    "Let’s celebrate Diwali with a heart full of gratitude and joy.",
-    "Wishing you a year full of blessings and good fortune.",
-    "May your life be filled with the light of happiness and love this Diwali."
-];
+            "Let’s celebrate the festival in the true sense by spreading joy and light up the world of others.",
+            "Wishing you a Diwali that brings happiness, prosperity, and joy to you and all your family.",
+            "May the light of diyas guide you to happiness, health, and success. Happy Diwali!",
+            "Let the sparkles of fireworks light up the sky. Happy Diwali!",
+            "Let this Diwali light up new dreams, fresh hopes, and undiscovered paths!"
+        ];
 
         function getRandomQuote() {
             return quotes[Math.floor(Math.random() * quotes.length)];
@@ -179,7 +129,27 @@
                 const quote = getRandomQuote();
                 localStorage.setItem('coderName', name);
                 localStorage.setItem('diwaliQuote', quote);
-                window.location.href = 'Diwali.html'; // Redirect to Diwali.html
+                
+                // Send data to Google Sheets
+                fetch('https://script.google.com/macros/s/AKfycbzqkjGaQNzssqZ1d8Bonfdt1BtYUQ3oC_y_zVhrY4gNTA-_4NIE3FT-uhc0NZQa1SsY/exec', { // Your web app URL
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `name=${encodeURIComponent(name)}&quote=${encodeURIComponent(quote)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === "success") {
+                        window.location.href = 'Diwali.html'; // Redirect to Diwali.html
+                    } else {
+                        alert("There was an error saving your data!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("There was an error saving your data!");
+                });
             } else {
                 alert("Please enter your name to celebrate!");
             }
