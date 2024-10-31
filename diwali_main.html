@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebrate Diwali</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #2c3e50;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .logo {
+            width: 400px; /* Adjust size as needed */
+            height: 400px; /* Adjust size as needed */
+            border-radius: 15px; /* Round corners */
+            overflow: hidden; /* Hide overflow for the round square effect */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add shadow */
+            margin-bottom: 20px; /* Space between logo and title */
+        }
+
+        .logo img {
+            width: 100%; /* Make image responsive */
+            height: 100%; /* Make image responsive */
+            object-fit: cover; /* Cover the logo area */
+        }
+
+        .input-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #coderName {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #e67e22;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #d35400;
+        }
+
+        .fireworks-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .quote {
+            font-size: 1.2em;
+            color: #f39c12;
+            text-align: center;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        @keyframes firework {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="Happy Diwali.jpg" alt="Diwali Logo"> <!-- Replace 'your-logo-url.png' with the actual URL of your logo -->
+    </div>
+    <h1> Let's Celebrate Diwali Together </h1>
+
+    <div class="input-section">
+        <input type="text" id="coderName" placeholder="Enter your name here">
+        <button onclick="celebrate()"> Celebrate Now</button>
+    </div>
+
+    <h2 id="nameDisplay"></h2>
+    <p class="quote" id="diwaliQuote"></p>
+
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        const quotes = [
+            "Let’s celebrate the festival in the true sense by spreading joy and light up the world of others.",
+            "Wishing you a Diwali that brings happiness, prosperity, and joy to you and all your family.",
+            "May the light of diyas guide you to happiness, health, and success. Happy Diwali!",
+            "Let the sparkles of fireworks light up the sky. Happy Diwali!",
+            "Let this Diwali light up new dreams, fresh hopes, and undiscovered paths!"
+        ];
+
+        function getRandomQuote() {
+            return quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        function celebrate() {
+            const name = document.getElementById('coderName').value;
+            if (name) {
+                const quote = getRandomQuote();
+                localStorage.setItem('coderName', name);
+                localStorage.setItem('diwaliQuote', quote);
+                window.location.href = 'Diwali.html'; // Redirect to Diwali.html
+            } else {
+                alert("Please enter your name to celebrate!");
+            }
+        }
+        
+        function createFireworks() {
+            const container = document.getElementById('fireworksContainer');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 15; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.position = 'absolute';
+                firework.style.width = '10px';
+                firework.style.height = '10px';
+                firework.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                firework.style.borderRadius = '50%';
+                firework.style.animation = 'firework 1s ease-out forwards';
+                firework.style.left = Math.random() * 100 + 'vw';
+                firework.style.top = Math.random() * 100 + 'vh';
+                container.appendChild(firework);
+            }
+        }
+    </script>
+</body>
+</html>

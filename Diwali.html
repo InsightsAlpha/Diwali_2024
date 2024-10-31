@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diwali Celebration</title>
+    <style>
+        body {
+            background-color: black;
+            background-size: cover;
+            overflow: hidden;
+            margin: 0;
+            color: white; /* Default text color */
+            font-family: Arial, sans-serif; /* Font family */
+            text-align: center; /* Center the text */
+        }
+        .fireworks {
+            position: absolute;
+            top: 0;
+            width: 33.3%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .left { left: 0; }
+        .center { left: 33.3%; }
+        .right { left: 66.6%; }
+        #greeting {
+            position: absolute;
+            left: 5%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust position */
+            z-index: 1; /* Make sure it's on top of fireworks */
+            animation: fadeInUp 2s ease forwards; /* Add fade-in animation */
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.6); /* Bright shadow for visibility */
+            background: rgba(0, 0, 0, 0.7); /* Semi-transparent background for readability */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Padding for spacing */
+            max-width: 90%; /* Responsive width */
+            top: 40%; /* Center vertically */
+            transform: translate(-50%, -50%); /* Adjust for centering */
+        }
+        .greeting-text {
+            font-size: 4em; /* Font size for greeting */
+            color: #f39c12; /* Eye-catching color for name */
+            animation: bounce 2s infinite alternate; /* Bounce effect */
+        }
+        .quote-text {
+            font-size: 2.5em; /* Font size for the quote */
+            margin-top: 20px; /* Space between name and quote */
+            color: #e67e22; /* Different eye-catching color for quote */
+            animation: fadeIn 2s ease forwards; /* Fade-in animation for quotes */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px); /* Start from above */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* Move to original position */
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px); /* Start from below */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* Move to original position */
+            }
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="greeting">
+        <div class="greeting-text"></div> <!-- Separate greeting for styling -->
+        <div class="quote-text"></div> <!-- Separate quote for styling -->
+    </div>
+
+    <div class="fireworks left"></div>
+    <div class="fireworks center"></div>
+    <div class="fireworks right"></div>
+
+    <script>
+        // Retrieve name and quote from local storage
+        const name = localStorage.getItem('coderName');
+        const quote = localStorage.getItem('diwaliQuote');
+        if (name) {
+            document.querySelector('.greeting-text').innerText = `Happy Diwali, ${name}!`;
+        }
+        if (quote) {
+            document.querySelector('.quote-text').innerText = quote;
+        }
+
+        function startFireworks(container) {
+            const bits = 60; // Number of particles per firework
+            const speed = 20; // Animation speed; decrease for faster animation
+            const bangs = 4; // Number of simultaneous fireworks
+            const colours = ["#03f", "#f03", "#0e0", "#93f", "#0cf", "#f93", "#f0c"];
+            const stars = [];
+            const bangHeight = [];
+            const intensity = [];
+            const color = [];
+            const Xpos = [];
+            const Ypos = [];
+            const dX = [];
+            const dY = [];
+            const decay = [];
+
+            function createDiv(char, size) {
+                const div = document.createElement("div");
+                div.style.font = size + "px monospace";
+                div.style.position = "absolute";
+                div.style.backgroundColor = "transparent";
+                div.appendChild(document.createTextNode(char));
+                container.appendChild(div);
+                return div;
+            }
+
+            function launch(N) {
+                color[N] = Math.floor(Math.random() * colours.length);
+                Xpos[N] = container.clientWidth / 2;
+                Ypos[N] = container.clientHeight - 5;
+                bangHeight[N] = Math.round((0.3 + Math.random()) * container.clientHeight * 0.6); // Increase for higher launch
+                dX[N] = (Math.random() - 0.5) * container.clientWidth / bangHeight[N];
+                stars[N].firstChild.nodeValue = dX[N] > 1.25 ? "/" : dX[N] < -1.25 ? "\\" : "|";
+                stars[N].style.color = colours[color[N]];
+            }
+
+            function bang(N) {
+                let activeBits = 0;
+                for (let i = bits * N; i < bits + bits * N; i++) {
+                    const style = stars[i].style;
+                    style.left = `${Xpos[i]}px`;
+                    style.top = `${Ypos[i]}px`;
+
+                    if (decay[i]) decay[i]--;
+                    else activeBits++;
+
+                    if (decay[i] === 15) style.fontSize = "7px";
+                    else if (decay[i] === 7) style.fontSize = "2px";
+                    else if (decay[i] === 1) style.visibility = "hidden";
+
+                    if (decay[i] > 1 && Math.random() < .1) {
+                        style.visibility = "hidden";
+                        setTimeout(() => style.visibility = "visible", speed - 1);
+                    }
+
+                    Xpos[i] += dX[i];
+                    Ypos[i] += (dY[i] += 1.5 / intensity[N]); // Adjust to change intensity of spread
+                }
+
+                if (activeBits !== bits) setTimeout(() => bang(N), speed);
+            }
+
+            function stepthrough(N) {
+                const oldX = Xpos[N];
+                const oldY = Ypos[N];
+                Xpos[N] += dX[N];
+                Ypos[N] -= 5; // Increase for faster rise speed
+
+                if (Ypos[N] < bangHeight[N]) {
+                    intensity[N] = 7 + Math.random() * 5; // Increase for greater intensity (spread)
+                    for (let i = N * bits; i < bits + bits * N; i++) {
+                        Xpos[i] = Xpos[N];
+                        Ypos[i] = Ypos[N];
+                        dY[i] = (Math.random() - 0.5) * intensity[N];
+                        dX[i] = (Math.random() - 0.5) * (intensity[N] - Math.abs(dY[i])) * 1.5; // Adjust for wider spread
+                        decay[i] = 16 + Math.floor(Math.random() * 16);
+                        stars[i].style.color = colours[i % colours.length];
+                        stars[i].style.fontSize = "13px";
+                        stars[i].style.visibility = "visible";
+                    }
+                    bang(N);
+                    launch(N);
+                }
+
+                stars[N].style.left = `${oldX}px`;
+                stars[N].style.top = `${oldY}px`;
+            }
+
+            function initFireworkAnimation() {
+                for (let i = 0; i < bangs; i++) {
+                    stars[i] = createDiv('|', 12);
+                    for (let j = bits * i; j < bits + bits * i; j++) {
+                        stars[j] = createDiv('*', 13);
+                    }
+                    launch(i);
+                    setInterval(() => stepthrough(i), speed);
+                }
+            }
+
+            initFireworkAnimation();
+        }
+
+        // Initialize fireworks in each container
+        const containers = document.querySelectorAll('.fireworks');
+        containers.forEach(startFireworks);
+    </script>
+</body>
+</html>
