@@ -8,11 +8,15 @@
         body {
             background-color: black;
             background-size: cover;
-            overflow: hidden;
+            overflow-y: auto; /* Allow vertical scrolling */
             margin: 0;
             color: white; /* Default text color */
             font-family: Arial, sans-serif; /* Font family */
             text-align: center; /* Center the text */
+            height: 100vh; /* Ensure full height for scrolling */
+            display: flex; /* Use flex to manage layout */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center align items */
         }
         .fireworks {
             position: absolute;
@@ -25,9 +29,7 @@
         .center { left: 33.3%; }
         .right { left: 66.6%; }
         #greeting {
-            position: absolute;
-            left: 5%; /* Center horizontally */
-            transform: translate(-50%, -50%); /* Adjust position */
+            position: relative; /* Change from absolute to relative for scrolling */
             z-index: 1; /* Make sure it's on top of fireworks */
             animation: fadeInUp 2s ease forwards; /* Add fade-in animation */
             text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.6); /* Bright shadow for visibility */
@@ -36,7 +38,7 @@
             padding: 20px; /* Padding for spacing */
             max-width: 90%; /* Responsive width */
             top: 40%; /* Center vertically */
-            transform: translate(-50%, -50%); /* Adjust for centering */
+            transform: translateY(-50%); /* Adjust for centering */
         }
         .greeting-text {
             font-size: 4em; /* Font size for greeting */
