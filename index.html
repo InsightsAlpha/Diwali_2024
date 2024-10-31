@@ -101,7 +101,7 @@
 
     <div class="input-section">
         <input type="text" id="coderName" placeholder="Enter your name here">
-        <button onclick="celebrate()"> Celebrate Now</button>
+        <button id="celebrateButton" onclick="celebrate()">Celebrate Now</button>
     </div>
 
     <h2 id="nameDisplay"></h2>
@@ -112,12 +112,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
         const quotes = [
-            "Let’s celebrate the festival in the true sense by spreading joy and light up the world of others.",
-            "Wishing you a Diwali that brings happiness, prosperity, and joy to you and all your family.",
-            "May the light of diyas guide you to happiness, health, and success. Happy Diwali!",
-            "Let the sparkles of fireworks light up the sky. Happy Diwali!",
-            "Let this Diwali light up new dreams, fresh hopes, and undiscovered paths!"
-        ];
+    "Let’s celebrate the festival in the true sense by spreading joy and light up the world of others.",
+    "Wishing you a Diwali that brings happiness, prosperity, and joy to you and all your family.",
+    "May the light of diyas guide you to happiness, health, and success. Happy Diwali!",
+    "Let the sparkles of fireworks light up the sky. Happy Diwali!",
+    "Let this Diwali light up new dreams, fresh hopes, and undiscovered paths!",
+    
+    "May the divine light of Diwali bring peace, prosperity, and happiness to all.",
+    "This Diwali, may we light up lives just as the diyas light up the darkness.",
+    "Let’s make this Diwali special by sharing it with those who need a smile.",
+    "Diwali is a reminder that darkness will always give way to light. Happy Diwali!",
+    "Celebrate this Diwali with a heart full of love and a sky full of fireworks!",
+    
+    "As we light lamps on this auspicious night, may our inner selves shine brighter.",
+    "May the diya’s flame remind us to spread warmth and joy to all around us.",
+    "Wishing you a Diwali that sparkles with peace, joy, and endless blessings.",
+    "Celebrate Diwali with love and laughter, not noise and pollution.",
+    "May Maa Lakshmi bless your home with happiness, wealth, and prosperity this Diwali.",
+    
+    "Let’s celebrate this Diwali with hearts as bright as diyas and spirits as high as fireworks!",
+    "This Diwali, let kindness be the brightest spark in your celebrations.",
+    "Just as the diyas illuminate the night, may Diwali enlighten your journey ahead.",
+    "Let’s pray this Diwali brings health, wealth, and light into every home.",
+    "Diwali is not just about lights and sweets; it’s about sharing joy and love."
+];
+
 
         function getRandomQuote() {
             return quotes[Math.floor(Math.random() * quotes.length)];
@@ -127,11 +146,20 @@
             const name = document.getElementById('coderName').value;
             if (name) {
                 const quote = getRandomQuote();
+
+                // Hide button and set a 30-second timer to show it again
+                const button = document.getElementById('celebrateButton');
+                button.style.display = 'none';  // Hide button
+                setTimeout(() => {
+                    button.style.display = 'inline-block'; // Show button after 30 seconds
+                }, 30000);
+
+                // Store name and quote in local storage
                 localStorage.setItem('coderName', name);
                 localStorage.setItem('diwaliQuote', quote);
                 
                 // Send data to Google Sheets
-                fetch('https://script.google.com/macros/s/AKfycbzqkjGaQNzssqZ1d8Bonfdt1BtYUQ3oC_y_zVhrY4gNTA-_4NIE3FT-uhc0NZQa1SsY/exec', { // Your web app URL
+                fetch('https://script.google.com/macros/s/AKfycbzqkjGaQNzssqZ1d8Bonfdt1BtYUQ3oC_y_zVhrY4gNTA-_4NIE3FT-uhc0NZQa1SsY/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -141,7 +169,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.result === "success") {
-                        window.location.href = 'Diwali.html'; // Redirect to Diwali.html
+                        window.location.href = 'Diwali.html';
                     } else {
                         alert("There was an error saving your data!");
                     }
